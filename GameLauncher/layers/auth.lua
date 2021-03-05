@@ -108,6 +108,8 @@ function Auth:init()
 	return data
 end
 
+function test() end
+
 function toCaption(mass)
 	local caption = ""
 	for _,k in pairs(mass) do
