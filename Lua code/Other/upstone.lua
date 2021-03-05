@@ -1,0 +1,43 @@
+local component = require("component")
+local inv = component.inventory_controller
+local robot = require("robot")
+
+function load()
+	robot.turnRight()
+	robot.drop()
+	inv.equip()
+	robot.dropDown()
+	robot.turnRight()
+	robot.select(4)
+	robot.drop()
+	robot.select(1)
+	inv.suckFromSlot(3,1,64)
+	robot.select(2)
+	inv.suckFromSlot(3,2,64)
+	os.sleep(3)
+	robot.select(3)
+	robot.suckDown()
+	inv.equip()
+	robot.turnLeft()
+	robot.suck()
+	robot.turnLeft()
+	robot.select(1)
+end
+robot.select(1)
+while true do
+	for i=1, 64 do
+		robot.select(1)
+		robot.place()
+		robot.select(3)
+		inv.equip()
+		robot.use()
+		robot.select(2)
+		inv.equip()
+		robot.use()
+		inv.equip()
+		robot.select(3)
+		inv.equip()
+		robot.swing()
+	end	
+	load()
+end		
