@@ -2,19 +2,6 @@ local User = {}
 local component = require("component")
 local computer = require("computer")
 local fs = require("filesystem")
-items = {
-    'IC2:blockGenerator:3',
-    'AdvancedSolarPanel:asp_crafting_items:9',
-    'IC2:upgradeModule ',
-    'dwcity:Granat ',
-    'dwcity:Cpu1 ',
-    'IC2:itemBatLamaCrystal:26 ',
-    'IC2:itemPlutonium ',
-    'IC2:itemArmorNanoHelmet:26 ',
-    'GraviSuite:advNanoChestPlate:26 ',
-    'IC2:itemArmorNanoLegs:26 ',
-    'IC2:itemArmorNanoBoots:26 '
-}
 function User:new(userName)
     local obj = {}
     obj.nick = userName
@@ -23,11 +10,7 @@ function User:new(userName)
         loginDate = os.date(), --getTime(2)
         dropItems = {}
     }
-
     function obj:saveLog()
-        for k=1, math.random(8) do
-            table.insert(self.logs.dropItems, items[math.random(1,11)])
-        end
         local file = io.open(self.logPath, "a")
         file:write('['..self.logs.loginDate..']'..'\n')
         for _,v in pairs(self.logs.dropItems) do file:write('-'.." "..tostring(v)..'\n') end
