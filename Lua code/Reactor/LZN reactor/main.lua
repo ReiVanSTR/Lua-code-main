@@ -37,8 +37,8 @@ function redstone(enable)
 		while chamber.isActive() do end
 	end	
 end
-function find(arg, size)
-	for k=1,size or 10 do
+function find(arg, size, startPos)
+	for k=startPos or 1,size or 10 do
 		if crystal.getStackInSlot(k) ~= nil then
 			if crystal.getStackInSlot(k).name == arg then
 				return k
@@ -48,22 +48,56 @@ function find(arg, size)
 	return false	
 end
 
-function change(reactorType)
-	local requireSlots = {}
+function changeType(reactorType)
+	local items = chamber.getAllStacks(false)
+	local pos = 37
 	if reactorType == 1 then
-		local items = chamber.getAllStacks(false)
-		local pos = 37
-		for _, k in pairs(lithium) do
-			crystal.pushItem(tempSide, k, 1,pos)
-			pos = pos + 1	
+		for _, lithiumPos in ipairs(lithium) do
+			if items[lithiumPos].id == "IC2:reactorUraniumQuad" then
+				crystal.pushItem(tempSide, lithiumPos, 1, pos)
+				pos = pos + 1
+				local slot = find("IC2:reactorLithiumCell")
+				if slot then
+					crystal.pushItem(pushSide, slot, 1, lithiumPos)
+				end
+			end
+		end
+		for k,v in ipairs(rod) do
+			for l,m in ipairs(lithium) do
+				if v==m then
+					table.remove(rod, k)
+				end
+			end
+		end
+	else
+		for _, lithiumPos in ipairs(lithium) do
+			if items[lithiumPos].id == "IC2:reactorLithiumCell" then
+				crystal.pushItem(tempSide, lithiumPos, 1, pos)
+				pos = pos + 1
+				local slot = find("IC2:reactorUraniumQuad") or find("IC2:reactorUraniumQuad",30,pos)
+				if slot then
+					crystal.pushItem(pushSide, slot, 1, lithiumPos)
+				end
+			end
+		end
+		for k,v in ipairs(lithium) do
+			local isHave = false
+			for l,m in ipairs(rod) do
+				if v==m then
+					isHave = true
+				end
+			end
+			if not isHave then table.insert(rod, v)
 		end
 	end
 end
 
+
 gpu.setResolution(35,11)
 if dvmode == true then gpu.setResolution(70,30) end -- DeveloperResolution
 if #args > 1 and args[1] == "temp" then maxHeat = tonumber(args[2]) print("Предельная темпиратура установлена в значение: "..args[2].."!") os.sleep(3) end
-if #args > 1 and args[1] == "-dev" then dvmode = true end 
+if #args > 1 and args[1] == "-dev" then dvmode = true end
+if #args > 1 and args[1] == "type" then if args[2] == "lithium" then changeType(1) print("Тип реакторы установлен на литиевый") elseif args[2] == "default" then changeType(0) print("Тип реакторы установлен на стандартный") end end
 r.setOutput(1, r_signal and 15 or 0)
 gpu.fill(1,1,160,50," ")
 event.shouldInterrupt = function() return false end
@@ -126,6 +160,16 @@ while true do
 				crystal.pushItem(pushSide,slot,1,i)
 			end	
 		end	
+	end
+	if reactorType == 1 then
+		for _,i in pairs(lithium) do
+			if not items[i] then
+				slot = find("IC2:reactorLithiumCell")
+				if slot ~= false then
+					crystal.pushItem(pushSide,slot,1,i)
+				end	
+			end	
+		end
 	end
 	redstone(true)
 	gpu.set(3,2, "Лазурита потрачено: "..(counter*9).."       ")
