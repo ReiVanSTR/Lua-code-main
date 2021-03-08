@@ -6,17 +6,19 @@ local event = require("event")
 local crystal = component.crystal
 local gpu = component.gpu
 local computer = require("computer")
-local version = "1.9 alfa"
+local version = "1.9 beta"
 local args = {...}
-dvmode = true
+dvmode = false
 r_signal = true
 tempControl = true
 maxHeat = 100
+sides = {'SOUTH'='NORTH','NORTH'='SOUTH','EAST'='WEST','WEST'='EAST'}
 pushSide = "SOUTH" --Сторона выталкивания
 tempSide = "NORTH" --Противоположная сторона от pushSide
 ebal_ya_w_rot_nizky_tps = 0.1 --Время до и после загрузки злн теплоотвода
 counter = 0
-reactorType=1
+reactorType=0
+reactorTypeString='default'
 --Require slots
 LZN = {
 	2, 7, 9, 14, 21, 26, 28, 33, 40, 45, 47, 52
@@ -60,7 +62,7 @@ function changeType(reactorType)
 				if slot ~= false then
 					crystal.pushItem(pushSide, slot, 1, lithiumPos)
 				end
-				print(slot)
+				if dvmode then print(slot) end
 			end
 		end
 		for k,v in ipairs(rod) do
@@ -78,7 +80,7 @@ function changeType(reactorType)
 				if slot ~= false then
 					crystal.pushItem(pushSide, slot, 1, lithiumPos)
 				end
-				print(slot)
+				if dvmode then print(slot) end
 			end
 		end
 		for k,v in ipairs(lithium) do
@@ -97,30 +99,29 @@ end
 if dvmode == true then gpu.setResolution(70,30) else gpu.setResolution(35,11) end -- DeveloperResolution
 if #args > 0 then
 	for pos,parm in ipairs(args) do
-		if parm == "temp" then maxHeat = tonumber(args[pos+1]) print("Предельная темпиратура установлена в значение: "..args[2].."!") os.sleep(3) end
-		if parm == "-dev" then dvmode = true end
+		if dvmode then print(pos, parm) end
+		if parm == "temp" then maxHeat = tonumber(args[pos+1]) print("Предельная темпиратура установлена в значение: "..args[pos+1].."!") os.sleep(3) end
+		if parm == "-dev" then dvmode = true print('Включен режим разработчика')end
+		if parm = "side" then pushSide = args[pos+1] tempSide=sides['pushSide'] end
 		if parm == "type" then 
 			if args[pos+1] == "lithium" then 
 				reactorType=1 
 				changeType(1)
-				print("Тип реакторы установлен на литиевый")
-				args['reactorType']=args[pos+1]
+				print("Тип реактора установлен на литиевый")
+				reactorTypeString='lithium'
 			elseif args[pos+1] == "default" then 
 				changeType(0) 
-				print("Тип реакторы установлен на стандартный") reactorType=0
-				args['reactorType']=args[pos+1]
+				print("Тип реактора установлен на стандартный") reactorType=0
+				reactorTypeString='default'
 			else 
 				changeType(0) 
 				print("Неверный тип реактора: "..args[pos+1].."\nустановлено значение default") 
-				args['reactorType']="default" 
+				reactorTypeString='default'
 			end 
 			os.sleep(3) 
 		end
 	end
 end
--- if #args > 1 and args[argPos] == "temp" then maxHeat = tonumber(args[argPos+1]) print("Предельная темпиратура установлена в значение: "..args[2].."!") argPos = argPos + 2 os.sleep(3) end
--- if #args > 1 and args[argPos] == "-dev" then dvmode = true argPos + 1 end
--- if #args > 1 and args[argPos] == "type" then if args[argPos+1] == "lithium" then reactorType=1 changeType(1) print("Тип реакторы установлен на литиевый") elseif args[2] == "default" then changeType(0) print("Тип реакторы установлен на стандартный") reactorType=0 else changeType(0) print("Неверный тип реактора: "..args[2].."\nустановлено значение default") args[2]="default" end os.sleep(3) end
 r.setOutput(1, r_signal and 15 or 0)
 gpu.fill(1,1,160,50," ")
 event.shouldInterrupt = function() return false end
@@ -200,7 +201,7 @@ while true do
 	gpu.set(3,4, "Выход: "..math.floor(chamber.getEUOutput()*5).." EU/t")
 	gpu.set(3,6, "Время работы: "..time.." секунд(ы)")
 	gpu.set(3,8, "Temp: "..tostring(chamber.getHeat()).."/"..tostring(maxHeat))
-	gpu.set(3,9, "Reactor type: "..args['reactorType'])
+	gpu.set(3,9, "Reactor type: "..reactorTypeString)
 	gpu.set(7,11, "Reactor Version: "..version)
 end	
 
