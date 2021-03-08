@@ -98,7 +98,7 @@ end
 if dvmode == true then gpu.setResolution(70,30) else gpu.setResolution(35,11) end -- DeveloperResolution
 if #args > 0 then
 	gpu.fill(1,1,160,50," ")
-	for k,v in ipairs(args) do if v=='-dev' then dvmode = true gpu.setResolution(70,30) print('Включен режим разработчика') os.sleep(3) end
+	for k,v in ipairs(args) do if v=='-dev' then dvmode = true gpu.setResolution(70,30) print('Включен режим разработчика') os.sleep(3) end end
 	for pos,parm in ipairs(args) do
 		if dvmode then print(pos, parm) end
 		if parm == "temp" then maxHeat = tonumber(args[pos+1]) print("Предельная темпиратура установлена в значение: "..args[pos+1].."!") os.sleep(3) end
