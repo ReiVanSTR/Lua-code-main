@@ -12,9 +12,9 @@ dvmode = false
 r_signal = true
 tempControl = true
 maxHeat = 100
-sides = {'SOUTH'='NORTH','NORTH'='SOUTH','EAST'='WEST','WEST'='EAST'}
+sides = {SOUTH='NORTH',NORTH='SOUTH',EAST='WEST',WEST='EAST'}
 pushSide = "SOUTH" --Сторона выталкивания
-tempSide = "NORTH" --Противоположная сторона от pushSide
+buffSide = "NORTH" --Противоположная сторона от pushSide
 ebal_ya_w_rot_nizky_tps = 0.1 --Время до и после загрузки злн теплоотвода
 counter = 0
 reactorType=0
@@ -57,7 +57,7 @@ function changeType(reactorType)
 	if reactorType == 1 then
 		for _, lithiumPos in ipairs(lithium) do
 			if items[lithiumPos] and items[lithiumPos].id == "IC2:reactorUraniumQuad" or not items[lithiumPos] then
-				while chamber.pushItem(tempSide, lithiumPos, 1, pos) == 0 do pos = pos + 1 end
+				while chamber.pushItem(buffSide, lithiumPos, 1, pos) == 0 do pos = pos + 1 end
 				local slot = find("reactorLithiumCell") or find("reactorLithiumCell",108,37)
 				if slot ~= false then
 					crystal.pushItem(pushSide, slot, 1, lithiumPos)
@@ -75,7 +75,7 @@ function changeType(reactorType)
 	else
 		for _, lithiumPos in ipairs(lithium) do
 			if items[lithiumPos] and items[lithiumPos].id == "IC2:reactorLithiumCell" or not items[lithiumPos] then
-				while chamber.pushItem(tempSide, lithiumPos, 1, pos) == 0 do pos = pos + 1 end
+				while chamber.pushItem(buffSide, lithiumPos, 1, pos) == 0 do pos = pos + 1 end
 				local slot = find("reactorUraniumQuad") or find("reactorUraniumQuad",108,37)
 				if slot ~= false then
 					crystal.pushItem(pushSide, slot, 1, lithiumPos)
@@ -101,8 +101,8 @@ if #args > 0 then
 	for pos,parm in ipairs(args) do
 		if dvmode then print(pos, parm) end
 		if parm == "temp" then maxHeat = tonumber(args[pos+1]) print("Предельная темпиратура установлена в значение: "..args[pos+1].."!") os.sleep(3) end
-		if parm == "-dev" then dvmode = true print('Включен режим разработчика')end
-		if parm = "side" then pushSide = args[pos+1] tempSide=sides['pushSide'] end
+		if parm == "-dev" then dvmode = true gpu.setResolution(70,30) print('Включен режим разработчика')end
+		if parm == "side" then pushSide = args[pos+1] buffSide=sides[pushSide] print('Сторона выталкивания: '..pushSide..'\nСторона буфера: '..buffSide) end
 		if parm == "type" then 
 			if args[pos+1] == "lithium" then 
 				reactorType=1 
@@ -136,7 +136,7 @@ while true do
 	time = math.floor(computer.uptime() - startTime)
 	if chamber.getHeat() > maxHeat and tempControl == true then
 		redstone(false)
-		chamber.pushItem(tempSide,46,_,35)
+		chamber.pushItem(buffSide,46,_,35)
 		while chamber.getHeat() > maxHeat do
 			gpu.fill(1,1,35,11," ")
 			gpu.set(8,4,"Охлаждение реактора!")
@@ -151,7 +151,7 @@ while true do
 				os.exit()
 			end
 		end
-		chamber.pushItem(tempSide,46)
+		chamber.pushItem(buffSide,46)
 		crystal.pushItem(pushSide,35,1,46)
 	end	
 	if dsu.getStoredItems().qty < 10 then
