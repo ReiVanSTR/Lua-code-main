@@ -12,7 +12,11 @@ dvmode = false
 r_signal = true
 tempControl = true
 maxHeat = 100
+<<<<<<< HEAD
 sides = {SOUTH='NORTH',NORTH='SOUTH',EAST='WEST',WEST='EAST'}
+=======
+sides = {'SOUTH'='NORTH','NORTH'='SOUTH','EAST'='WEST','WEST'='EAST'}
+>>>>>>> master
 pushSide = "SOUTH" --Сторона выталкивания
 buffSide = "NORTH" --Противоположная сторона от pushSide
 ebal_ya_w_rot_nizky_tps = 0.1 --Время до и после загрузки злн теплоотвода
@@ -101,8 +105,13 @@ if #args > 0 then
 	for pos,parm in ipairs(args) do
 		if dvmode then print(pos, parm) end
 		if parm == "temp" then maxHeat = tonumber(args[pos+1]) print("Предельная темпиратура установлена в значение: "..args[pos+1].."!") os.sleep(3) end
+<<<<<<< HEAD
 		if parm == "-dev" then dvmode = true gpu.setResolution(70,30) print('Включен режим разработчика')end
 		if parm == "side" then pushSide = args[pos+1] buffSide=sides[pushSide] print('Сторона выталкивания: '..pushSide..'\nСторона буфера: '..buffSide) end
+=======
+		if parm == "-dev" then dvmode = true print('Включен режим разработчика')end
+		if parm = "side" then pushSide = args[pos+1] tempSide=sides['pushSide'] end
+>>>>>>> master
 		if parm == "type" then 
 			if args[pos+1] == "lithium" then 
 				reactorType=1 
