@@ -1,12 +1,12 @@
 local component = require("component")
 local chamber = component.reactor_chamber
 local r = component.redstone
-local dsu = component.deep_storage_unit --deep_storage_unit для одиночки: __________________ 
+local dsu = component.__________________ --.deep_storage_unit --deep_storage_unit для одиночки: __________________ 
 local event = require("event")
 local crystal = component.crystal
 local gpu = component.gpu
 local computer = require("computer")
-local version = "1.8"
+local version = "1.9 alfa"
 local args = {...}
 dvmode = true
 r_signal = true
@@ -16,6 +16,7 @@ pushSide = "SOUTH" --Сторона выталкивания
 tempSide = "NORTH" --Противоположная сторона от pushSide
 ebal_ya_w_rot_nizky_tps = 0.1 --Время до и после загрузки злн теплоотвода
 counter = 0
+reactorType=1
 --Require slots
 LZN = {
 	2, 7, 9, 14, 21, 26, 28, 33, 40, 45, 47, 52
@@ -53,13 +54,13 @@ function changeType(reactorType)
 	local pos = 37
 	if reactorType == 1 then
 		for _, lithiumPos in ipairs(lithium) do
-			if items[lithiumPos].id == "IC2:reactorUraniumQuad" then
-				crystal.pushItem(tempSide, lithiumPos, 1, pos)
-				pos = pos + 1
-				local slot = find("IC2:reactorLithiumCell")
-				if slot then
+			if items[lithiumPos] and items[lithiumPos].id == "IC2:reactorUraniumQuad" or not items[lithiumPos] then
+				while chamber.pushItem(tempSide, lithiumPos, 1, pos) == 0 do pos = pos + 1 end
+				local slot = find("reactorLithiumCell") or find("reactorLithiumCell",108,37)
+				if slot ~= false then
 					crystal.pushItem(pushSide, slot, 1, lithiumPos)
 				end
+				print(slot)
 			end
 		end
 		for k,v in ipairs(rod) do
@@ -71,13 +72,13 @@ function changeType(reactorType)
 		end
 	else
 		for _, lithiumPos in ipairs(lithium) do
-			if items[lithiumPos].id == "IC2:reactorLithiumCell" then
-				crystal.pushItem(tempSide, lithiumPos, 1, pos)
-				pos = pos + 1
-				local slot = find("IC2:reactorUraniumQuad") or find("IC2:reactorUraniumQuad",30,pos)
-				if slot then
+			if items[lithiumPos] and items[lithiumPos].id == "IC2:reactorLithiumCell" or not items[lithiumPos] then
+				while chamber.pushItem(tempSide, lithiumPos, 1, pos) == 0 do pos = pos + 1 end
+				local slot = find("reactorUraniumQuad") or find("reactorUraniumQuad",108,37)
+				if slot ~= false then
 					crystal.pushItem(pushSide, slot, 1, lithiumPos)
 				end
+				print(slot)
 			end
 		end
 		for k,v in ipairs(lithium) do
@@ -87,17 +88,39 @@ function changeType(reactorType)
 					isHave = true
 				end
 			end
-			if not isHave then table.insert(rod, v)
+			if not isHave then table.insert(rod, v) end
 		end
 	end
 end
 
 
-gpu.setResolution(35,11)
-if dvmode == true then gpu.setResolution(70,30) end -- DeveloperResolution
-if #args > 1 and args[1] == "temp" then maxHeat = tonumber(args[2]) print("Предельная темпиратура установлена в значение: "..args[2].."!") os.sleep(3) end
-if #args > 1 and args[1] == "-dev" then dvmode = true end
-if #args > 1 and args[1] == "type" then if args[2] == "lithium" then changeType(1) print("Тип реакторы установлен на литиевый") elseif args[2] == "default" then changeType(0) print("Тип реакторы установлен на стандартный") end end
+if dvmode == true then gpu.setResolution(70,30) else gpu.setResolution(35,11) end -- DeveloperResolution
+if #args > 0 then
+	for pos,parm in ipairs(args) do
+		if parm == "temp" then maxHeat = tonumber(args[pos+1]) print("Предельная темпиратура установлена в значение: "..args[2].."!") os.sleep(3) end
+		if parm == "-dev" then dvmode = true end
+		if parm == "type" then 
+			if args[pos+1] == "lithium" then 
+				reactorType=1 
+				changeType(1)
+				print("Тип реакторы установлен на литиевый")
+				args['reactorType']=args[pos+1]
+			elseif args[pos+1] == "default" then 
+				changeType(0) 
+				print("Тип реакторы установлен на стандартный") reactorType=0
+				args['reactorType']=args[pos+1]
+			else 
+				changeType(0) 
+				print("Неверный тип реактора: "..args[pos+1].."\nустановлено значение default") 
+				args['reactorType']="default" 
+			end 
+			os.sleep(3) 
+		end
+	end
+end
+-- if #args > 1 and args[argPos] == "temp" then maxHeat = tonumber(args[argPos+1]) print("Предельная темпиратура установлена в значение: "..args[2].."!") argPos = argPos + 2 os.sleep(3) end
+-- if #args > 1 and args[argPos] == "-dev" then dvmode = true argPos + 1 end
+-- if #args > 1 and args[argPos] == "type" then if args[argPos+1] == "lithium" then reactorType=1 changeType(1) print("Тип реакторы установлен на литиевый") elseif args[2] == "default" then changeType(0) print("Тип реакторы установлен на стандартный") reactorType=0 else changeType(0) print("Неверный тип реактора: "..args[2].."\nустановлено значение default") args[2]="default" end os.sleep(3) end
 r.setOutput(1, r_signal and 15 or 0)
 gpu.fill(1,1,160,50," ")
 event.shouldInterrupt = function() return false end
@@ -105,6 +128,7 @@ startTime = math.floor(computer.uptime())
 while true do
 	name,_,_,code=event.pull(0.01,"key_down")
 	if code == 74 then
+		gpu.fill(1,1,160,50," ")
 		r.setOutput(1, 0) print("Реактор отключён!")
 		break
 	end	
@@ -155,7 +179,7 @@ while true do
 	end
 	for _,i in pairs(rod) do
 		if not items[i] then
-			slot = find("reactorUraniumQuad") or find("reactorMOXQuad")
+			slot = find("reactorUraniumQuad") or find("reactorMOXQuad") or find("reactorUraniumQuad",108,37) or find("reactorMOXQuad",108,37)
 			if slot ~= false then
 				crystal.pushItem(pushSide,slot,1,i)
 			end	
@@ -164,7 +188,7 @@ while true do
 	if reactorType == 1 then
 		for _,i in pairs(lithium) do
 			if not items[i] then
-				slot = find("IC2:reactorLithiumCell")
+				slot = find("reactorLithiumCell") or find("reactorLithiumCell",108,37)
 				if slot ~= false then
 					crystal.pushItem(pushSide,slot,1,i)
 				end	
@@ -175,8 +199,9 @@ while true do
 	gpu.set(3,2, "Лазурита потрачено: "..(counter*9).."       ")
 	gpu.set(3,4, "Выход: "..math.floor(chamber.getEUOutput()*5).." EU/t")
 	gpu.set(3,6, "Время работы: "..time.." секунд(ы)")
-	gpu.set(3,8,"Temp: "..tostring(chamber.getHeat()).."/"..tostring(maxHeat))
-	gpu.set(7,10,"Reactor Version: "..version)
+	gpu.set(3,8, "Temp: "..tostring(chamber.getHeat()).."/"..tostring(maxHeat))
+	gpu.set(3,9, "Reactor type: "..args['reactorType'])
+	gpu.set(7,11, "Reactor Version: "..version)
 end	
 
 --1 цикл 21800 лазурита // 1,09 лазурита в секунду // 20000 секунд в 1 цикле
