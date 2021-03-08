@@ -8,12 +8,12 @@ local gpu = component.gpu
 local computer = require("computer")
 local version = "1.8"
 local args = {...}
-dvmode = false
+dvmode = true
 r_signal = true
 tempControl = true
 maxHeat = 100
-pushSide = "WEST" --Сторона выталкивания
-tempSide = "EAST" --Противоположная сторона от pushSide
+pushSide = "SOUTH" --Сторона выталкивания
+tempSide = "NORTH" --Противоположная сторона от pushSide
 ebal_ya_w_rot_nizky_tps = 0.1 --Время до и после загрузки злн теплоотвода
 counter = 0
 --Require slots
@@ -37,8 +37,8 @@ function redstone(enable)
 		while chamber.isActive() do end
 	end	
 end
-function find(arg)
-	for k=1,10 do
+function find(arg, size)
+	for k=1,size or 10 do
 		if crystal.getStackInSlot(k) ~= nil then
 			if crystal.getStackInSlot(k).name == arg then
 				return k
@@ -48,9 +48,22 @@ function find(arg)
 	return false	
 end
 
+function change(reactorType)
+	local requireSlots = {}
+	if reactorType == 1 then
+		local items = chamber.getAllStacks(false)
+		local pos = 37
+		for _, k in pairs(lithium) do
+			crystal.pushItem(tempSide, k, 1,pos)
+			pos = pos + 1	
+		end
+	end
+end
+
 gpu.setResolution(35,11)
 if dvmode == true then gpu.setResolution(70,30) end -- DeveloperResolution
-if #args > 1 and args[1] == "temp" then maxHeat = tonumber(args[2]) print("Предельная темпиратура установлена в значение: "..args[2].."!") os.sleep(3) end 
+if #args > 1 and args[1] == "temp" then maxHeat = tonumber(args[2]) print("Предельная темпиратура установлена в значение: "..args[2].."!") os.sleep(3) end
+if #args > 1 and args[1] == "-dev" then dvmode = true end 
 r.setOutput(1, r_signal and 15 or 0)
 gpu.fill(1,1,160,50," ")
 event.shouldInterrupt = function() return false end
