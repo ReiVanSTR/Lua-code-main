@@ -1,7 +1,7 @@
 local component = require("component")
 local chamber = component.reactor_chamber
 local r = component.redstone
-local dsu = component.__________________ --.deep_storage_unit --deep_storage_unit для одиночки: __________________ 
+local dsu = component.deep_storage_unit --.deep_storage_unit --deep_storage_unit для одиночки: __________________ 
 local event = require("event")
 local crystal = component.crystal
 local gpu = component.gpu
