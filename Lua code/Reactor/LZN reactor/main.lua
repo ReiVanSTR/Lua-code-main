@@ -6,7 +6,7 @@ local event = require("event")
 local crystal = component.crystal
 local gpu = component.gpu
 local computer = require("computer")
-local version = "1.9 beta"
+local version = "1.9.2 Beta"
 local args = {...}
 dvmode = false
 r_signal = true
@@ -110,7 +110,7 @@ if #args > 0 then
 				print("Тип реактора установлен на литиевый")
 				reactorTypeString='lithium'
 			elseif args[pos+1] == "default" then 
-				changeType(0) 
+				changeType(0)
 				print("Тип реактора установлен на стандартный") reactorType=0
 				reactorTypeString='default'
 			else 
