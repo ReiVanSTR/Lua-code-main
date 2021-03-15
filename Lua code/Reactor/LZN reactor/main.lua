@@ -104,7 +104,7 @@ if #args > 0 then
 		if dvmode then print(pos, parm) end
 		if parm == "temp" then maxHeat = tonumber(args[pos+1]) print("Предельная темпиратура установлена в значение: "..args[pos+1].."!") os.sleep(3) end
 		if parm == "side" then pushSide = args[pos+1] buffSide=sides[pushSide] print('Сторона выталкивания: '..pushSide..'\nСторона буфера: '..buffSide) os.sleep(3) end
-		if parm == "keycode" then if type(args[pos+1]) == "number" then exitKeyCode = args[pos+1] print('Exit Key Code: '..exitKeyCode) else print('Unexpected Key Code, Default: '..exitKeyCode) end end
+		if parm == "keycode" then if type(tonumber(args[pos+1])) == "number" then exitKeyCode = tonumber(args[pos+1]) print('Exit Key Code: '..exitKeyCode) else print('Unexpected Key Code, Default: '..exitKeyCode) end os.sleep(3) end
 		if parm == "type" then 
 			if args[pos+1] == "lithium" then 
 				reactorType=1 
@@ -130,7 +130,8 @@ event.shouldInterrupt = function() return false end
 startTime = math.floor(computer.uptime())
 while true do
 	name,_,_,code=event.pull(0.01,"key_down")
-	if code == 74 then
+	if developerMode then print(code) end
+	if code == exitKeyCode or code == 74 then
 		gpu.fill(1,1,160,50," ")
 		r.setOutput(1, 0) print("Реактор отключён!")
 		break
