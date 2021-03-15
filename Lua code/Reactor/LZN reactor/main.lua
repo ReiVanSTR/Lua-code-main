@@ -19,6 +19,7 @@ ebal_ya_w_rot_nizky_tps = 0.1 --Время до и после загрузки �
 counter = 0
 reactorType=0
 reactorTypeString='default'
+exitKeyCode = 74 --NumMinus
 --Require slots
 LZN = {
 	2, 7, 9, 14, 21, 26, 28, 33, 40, 45, 47, 52
@@ -103,6 +104,7 @@ if #args > 0 then
 		if dvmode then print(pos, parm) end
 		if parm == "temp" then maxHeat = tonumber(args[pos+1]) print("Предельная темпиратура установлена в значение: "..args[pos+1].."!") os.sleep(3) end
 		if parm == "side" then pushSide = args[pos+1] buffSide=sides[pushSide] print('Сторона выталкивания: '..pushSide..'\nСторона буфера: '..buffSide) os.sleep(3) end
+		if parm == "keycode" then if type(args[pos+1]) == "number" then exitKeyCode = args[pos+1] print('Exit Key Code: '..exitKeyCode) else print('Unexpected Key Code, Default: '..exitKeyCode) end end
 		if parm == "type" then 
 			if args[pos+1] == "lithium" then 
 				reactorType=1 
