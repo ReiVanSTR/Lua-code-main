@@ -1,5 +1,13 @@
-<mxfile host="app.diagrams.net" modified="2021-04-03T19:52:31.699Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15" etag="45-dkdzKa-_RCpO-r-K3" version="14.4.9" type="github">
-  <diagram id="SIkGXITU9Z35wxNCEEsx" name="Page-1">
+<mxfile host="app.diagrams.net" modified="2021-04-03T19:55:36.288Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15" etag="AatLHKgoLCUgyABTcYKP" version="14.4.9" type="github" pages="6">
+  <diagram id="oj_lUzTvV5U2_y1JJNv8" name="Business plan">
+    <mxGraphModel dx="946" dy="662" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="fGTLadYADHxhibQuAh-2-0" />
+        <mxCell id="fGTLadYADHxhibQuAh-2-1" parent="fGTLadYADHxhibQuAh-2-0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="SIkGXITU9Z35wxNCEEsx" name="Discord server settings ">
     <mxGraphModel dx="1351" dy="946" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
@@ -31,6 +39,38 @@
         <mxCell id="UHk0uMI-Ep7OaX0F3Ku_-16" value="Настройки сервера, текстовых/голосовых каналов" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="1">
           <mxGeometry x="410" y="350" width="170" height="60" as="geometry" />
         </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="tzFC8J6uOOjJ0if0LzKT" name="Discord Bot">
+    <mxGraphModel dx="946" dy="662" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="aosfw_s_lxsCQFhFXzd0-0" />
+        <mxCell id="aosfw_s_lxsCQFhFXzd0-1" parent="aosfw_s_lxsCQFhFXzd0-0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="8wsDLEndlQm1OcT_xryq" name="Telegram Bot">
+    <mxGraphModel dx="946" dy="662" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="FIPCymq9KWB-YJy2VyMd-0" />
+        <mxCell id="FIPCymq9KWB-YJy2VyMd-1" parent="FIPCymq9KWB-YJy2VyMd-0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="xZVb3W69q7G9_iQhyhNe" name="WebSite graph">
+    <mxGraphModel dx="946" dy="662" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="QBwZGXnkJlRbiwaSrcac-0" />
+        <mxCell id="QBwZGXnkJlRbiwaSrcac-1" parent="QBwZGXnkJlRbiwaSrcac-0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="PbzlYQqQUaRfMm9eaP4f" name="WebSite logic">
+    <mxGraphModel dx="946" dy="662" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="5xAtOuTgf-JLgOb1WVcO-0" />
+        <mxCell id="5xAtOuTgf-JLgOb1WVcO-1" parent="5xAtOuTgf-JLgOb1WVcO-0" />
       </root>
     </mxGraphModel>
   </diagram>
