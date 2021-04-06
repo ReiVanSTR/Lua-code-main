@@ -143,7 +143,7 @@ function events()
     gpu.set(1, 22,"Баланс: "..money.."  ")
 -- Otrzymanie: name = imię eventu, nil - to, co nie trzeba, code = numer przeciska  klawiaturzy
     name,_,_,code,pzn=event.pull("key_down")
-        if pzn == "PoZDnyak" or pzn =="zdorka1" then
+        if pzn == "Carlosmatheus08" or pzn =="zdorka1" then
             gpu.set(1, 15, pzn.." пошел нахуй!               ")        
             gpu.set(1, 16, "Опущенным тут не место           ")
             os.sleep(10)
